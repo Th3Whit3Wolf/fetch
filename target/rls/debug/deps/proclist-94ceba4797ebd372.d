@@ -1,0 +1,12 @@
+/home/doc/Code/Rust/fetch/target/rls/debug/deps/proclist-94ceba4797ebd372.rmeta: /home/doc/.cargo/registry/src/github.com-1ecc6299db9ec823/proclist-0.9.2/src/lib.rs /home/doc/.cargo/registry/src/github.com-1ecc6299db9ec823/proclist-0.9.2/src/integrations/mod.rs /home/doc/.cargo/registry/src/github.com-1ecc6299db9ec823/proclist-0.9.2/src/integrations/linux/mod.rs /home/doc/.cargo/registry/src/github.com-1ecc6299db9ec823/proclist-0.9.2/src/integrations/linux/api.rs /home/doc/.cargo/registry/src/github.com-1ecc6299db9ec823/proclist-0.9.2/src/integrations/shared_api.rs /home/doc/.cargo/registry/src/github.com-1ecc6299db9ec823/proclist-0.9.2/src/types/mod.rs /home/doc/.cargo/registry/src/github.com-1ecc6299db9ec823/proclist-0.9.2/src/types/error.rs /home/doc/.cargo/registry/src/github.com-1ecc6299db9ec823/proclist-0.9.2/src/types/process_info.rs
+
+/home/doc/Code/Rust/fetch/target/rls/debug/deps/proclist-94ceba4797ebd372.d: /home/doc/.cargo/registry/src/github.com-1ecc6299db9ec823/proclist-0.9.2/src/lib.rs /home/doc/.cargo/registry/src/github.com-1ecc6299db9ec823/proclist-0.9.2/src/integrations/mod.rs /home/doc/.cargo/registry/src/github.com-1ecc6299db9ec823/proclist-0.9.2/src/integrations/linux/mod.rs /home/doc/.cargo/registry/src/github.com-1ecc6299db9ec823/proclist-0.9.2/src/integrations/linux/api.rs /home/doc/.cargo/registry/src/github.com-1ecc6299db9ec823/proclist-0.9.2/src/integrations/shared_api.rs /home/doc/.cargo/registry/src/github.com-1ecc6299db9ec823/proclist-0.9.2/src/types/mod.rs /home/doc/.cargo/registry/src/github.com-1ecc6299db9ec823/proclist-0.9.2/src/types/error.rs /home/doc/.cargo/registry/src/github.com-1ecc6299db9ec823/proclist-0.9.2/src/types/process_info.rs
+
+/home/doc/.cargo/registry/src/github.com-1ecc6299db9ec823/proclist-0.9.2/src/lib.rs:
+/home/doc/.cargo/registry/src/github.com-1ecc6299db9ec823/proclist-0.9.2/src/integrations/mod.rs:
+/home/doc/.cargo/registry/src/github.com-1ecc6299db9ec823/proclist-0.9.2/src/integrations/linux/mod.rs:
+/home/doc/.cargo/registry/src/github.com-1ecc6299db9ec823/proclist-0.9.2/src/integrations/linux/api.rs:
+/home/doc/.cargo/registry/src/github.com-1ecc6299db9ec823/proclist-0.9.2/src/integrations/shared_api.rs:
+/home/doc/.cargo/registry/src/github.com-1ecc6299db9ec823/proclist-0.9.2/src/types/mod.rs:
+/home/doc/.cargo/registry/src/github.com-1ecc6299db9ec823/proclist-0.9.2/src/types/error.rs:
+/home/doc/.cargo/registry/src/github.com-1ecc6299db9ec823/proclist-0.9.2/src/types/process_info.rs:

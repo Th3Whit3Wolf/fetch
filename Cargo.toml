@@ -36,7 +36,8 @@ arch = ["libalpm-fork"]
 #rpm = ["librpm"]
 
 [dependencies.x11]
-git = "https://github.com/FriedPandaFries/x11-rs.git"
+xversion = "2.18.1"
+features = ["xlib"] 
 optional = true
 
 [dependencies.vulkano]

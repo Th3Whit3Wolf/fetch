@@ -1,0 +1,4 @@
+cargo:rerun-if-env-changed=CUPID_PRETEND_CPUID_NOT_AVAILABLE
+cargo:rerun-if-env-changed=CUPID_FORCE_ENGINE
+cargo:rustc-cfg=cpuid_available
+cargo:rustc-cfg=engine_std
