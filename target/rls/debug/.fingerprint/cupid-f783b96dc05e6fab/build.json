@@ -1,1 +1,0 @@
-{"rustc":11662075050264400882,"features":"","target":0,"profile":0,"path":0,"deps":[["cupid v0.6.1","build_script_build",15337536026397048989]],"local":[{"EnvBased":["CUPID_PRETEND_CPUID_NOT_AVAILABLE",null]},{"EnvBased":["CUPID_FORCE_ENGINE",null]}],"rustflags":[],"metadata":0}
