@@ -7,22 +7,15 @@ edition = "2018"
 [build]
 rustflags = ["-C", "target-cpu=native"]
 
-[dependencies]
-cupid = "0.6.1"
-sys-info = "0.5.6"
-num_cpus = "1.9.0"
-systemstat = "0.1.4"
-uptime_lib = "0.1.0"
-libc = "0.2.47"
-hostname = "0.1.5"
-hashbrown = "0.1.8"
-subprocess = "0.1.18"
-shells = "0.2.0" # easier to pass shell commands
-os-release = "0.1.0"
-proclist = "0.9.2"
-procfs = "0.4.2"
-sysinfo = "0.8.5"
 
+[dependencies]
+libc = "0.2"
+bytesize = "1.0.0"
+chrono = "0.4.6"
+lazy_static = "1.0"
+
+[target.'cfg(any(target_os = "linux", target_os = "android"))'.dependencies]
+nom = "3.2"
 # librpm might work
 # easier to pass shell commands
 
@@ -65,3 +58,11 @@ lto = true
 debug-assertions = false
 codegen-units = 1
 panic = 'unwind'
+
+[lib]
+name = "fetch_rs"
+path = "src/lib.rs"
+
+[[bin]]
+name = "mybin"
+path = "src/bin.rs"
