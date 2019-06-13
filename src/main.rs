@@ -15,15 +15,15 @@ fn main() {
     let user = lib::get_unix_username().unwrap();
     let hostname = lib::hostname().unwrap();
     let titlebar = lib::make_titlebar(&user, &hostname);
-    let res = resolution::get_resolution(true);
+    //let res = resolution::get_resolution(true);
     let distro = lib::get_distro();
     let host = lib::get_host();
     let kernel = lib::get_kernel(true);
     let uptime = uptime::get_uptime(false);
-    let packages = packages::packages(true);
+    //let packages = packages::packages(true);
     let shell = lib::get_shell().get_name();
     let de = lib::get_de();
-    let terminal = &term::term()[0];
+    //let terminal = &term::term()[0];
 
     // Shows Memory Percentage used on true
     let mem = lib::get_mem(false);
@@ -41,14 +41,14 @@ fn main() {
     println!("{}", host);
     println!("{}", kernel);
     println!("{}", uptime);
-    println!("{}", packages);
+    //println!("{}", packages);
     println!("Shell: {}", shell);
-    println!("Resolution: {}", res);
+    //println!("Resolution: {}", res);
     println!("DE: {:?}", de);
     //println!("{}", Window Manager);
     //println!("{}", WM Theme);
     //println!("{}", Icons);
-    println!("Terminal: {}", terminal);
+    //println!("Terminal: {}", terminal);
     //println!("{}", Terminal Font);
     println!("{}", cpu);
     for i in gpus {

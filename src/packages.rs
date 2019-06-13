@@ -101,15 +101,11 @@ pub fn packages(package_manager: bool) -> String {
             let packages: String = "Packages: ".to_string() + &sum.to_string();
             packages
         }
-    } else {
-        if s.is_empty() {
-            "Packages: Unknown".to_string()
-        } else {
-            let join = s.join(", ");
-            let packages: String = "Packages: ".to_string() + &join;
-            packages
-        }
-    }
+    } else if s.is_empty() {
+    "Packages: Unknown".to_string()
+} else {
+    "Packages: ".to_string() + &s.join(", ")
+}
 }
 
 #[cfg(feature = "rpm")]
