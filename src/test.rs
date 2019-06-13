@@ -152,8 +152,8 @@ fn max() {
     let host = get_host();
     let titlebar = make_titlebar(&user, &hostname);
     let kernel = get_kernel(false);
-    let uptime = get_uptime(true);
-    let packages = packages(true);
+    let uptime = get_uptime(false);
+    //let packages = packages(true);
     let shell = get_shell().get_name();
     let res = get_resolution(false);
     let de = get_de();
@@ -174,8 +174,8 @@ fn max() {
     println!("{}", host);
     println!("{}", kernel);
     println!("{}", uptime);
-    println!("{}", packages);
-    println!("{}", shell);
+    // println!("{}", packages);
+    println!("Shell: {}", shell);
     println!("Resolution: {}", res);
     println!("DE: {:?}", de);
     //println!("{}", Window Manager);
@@ -184,7 +184,7 @@ fn max() {
     //println!("{}", Terminal);
     //println!("{}", Terminal Font);
     println!("{}", cpu);
-    get_gpu(false);
+    //get_gpu(false);
     println!("{}", mem);
 
     println!("\nTime: {:?} \n\n", now.elapsed());

@@ -19,37 +19,6 @@ use std::{
     ptr, str,
 };
 
-/*
-pub fn hashy(path: &str, get: &str) -> Result<String, Error> {
-    if cfg!(target_os = "linux") {
-        let f = File::open(path)?;
-        let reader = BufReader::new(f);
-        let mut hashm: HashMap<String, String> = reader
-            .lines()
-            .filter_map(|line| {
-                let line = line.unwrap();
-                let mut split_line = line.split('=').fuse();
-                match (split_line.next(), split_line.next()) {
-                    (Some(label), Some(value)) => {
-                        let label = label.trim().to_string();
-                        let value = str::replace(&value.trim().to_string(), '"', "");
-                        Some((label, value))
-                    }
-                    _ => None,
-                }
-            })
-            .collect();
-        let string = hashm
-            .remove(get)
-            .ok_or_else(|| Error::from(ErrorKind::InvalidData))?;
-
-        Ok(string)
-    } else {
-        Err(Error::from(ErrorKind::Other))
-    }
-}
-*/
-
 fn cpu_parse(s: &str, brand: bool) -> String {
     let s = str::replace(&s, "(TM)", "");
     let s = str::replace(&s, "(tm)", "");
@@ -105,22 +74,22 @@ pub fn megabytes(num: usize) -> String {
     let num = num / 1024;
     let string = num.to_string();
     match num as usize {
-        0...9 => "".to_string() + &string[..1] + " MB",
-        10...99 => "".to_string() + &string[..2] + " MB",
-        100...999 => "".to_string() + &string[..3] + " MB",
-        1_000...9_999 => "".to_string() + &string[..1] + "," + &string[1..4] + " MB",
-        10_000...99_999 => "".to_string() + &string[..2] + "," + &string[2..5] + " MB",
-        100_000...999_999 => "".to_string() + &string[..3] + "," + &string[3..6] + " MB",
-        1_000_000...9_999_999 => {
+        0..=9 => "".to_string() + &string[..1] + " MB",
+        10..=99 => "".to_string() + &string[..2] + " MB",
+        100..=999 => "".to_string() + &string[..3] + " MB",
+        1_000..=9_999 => "".to_string() + &string[..1] + "," + &string[1..4] + " MB",
+        10_000..=99_999 => "".to_string() + &string[..2] + "," + &string[2..5] + " MB",
+        100_000..=999_999 => "".to_string() + &string[..3] + "," + &string[3..6] + " MB",
+        1_000_000..=9_999_999 => {
             "".to_string() + &string[..1] + "," + &string[1..4] + "," + &string[4..7] + " MB"
         }
-        10_000_000...99_999_999 => {
+        10_000_000..=99_999_999 => {
             "".to_string() + &string[..2] + "," + &string[2..5] + "," + &string[5..8] + " MB"
         }
-        100_000_000...999_999_999 => {
+        100_000_000..=999_999_999 => {
             "".to_string() + &string[..3] + "," + &string[3..6] + "," + &string[6..8] + " MB"
         }
-        1_000_000_000...9_999_999_999 => {
+        1_000_000_000..=9_999_999_999 => {
             "".to_string()
                 + &string[..1]
                 + ","
@@ -518,16 +487,14 @@ pub fn get_gpu(brand: bool) -> Vec<String> {
                 let gpu = str::replace(&gpu, "(R)", "").to_string();
                 let gpu: String = gpu.split('(').take(1).next().unwrap_or("").to_string();
                 if !brand {
-                    let gpu = str::replace(&gpu, "Intel ", "");
-                    gpu
+                    str::replace(&gpu, "Intel ", "")
                 } else {
                     gpu
                 }
             } else {
                 let gpu = res.join(" ");
                 if !brand {
-                    let gpu = str::replace(&gpu, "AMD", "").to_string();
-                    gpu
+                    str::replace(&gpu, "AMD", "").to_string()
                 } else {
                     gpu
                 }
@@ -539,12 +506,10 @@ pub fn get_gpu(brand: bool) -> Vec<String> {
                 } else {
                     "Nvidia ".to_string() + &res.join(" ")
                 }
+            } else if !brand {
+                res.join(" ")
             } else {
-                if !brand {
-                    res.join(" ")
-                } else {
-                    "AMD ".to_string() + &res.join(" ")
-                }
+                "AMD ".to_string() + &res.join(" ")
             }
         } else {
             gpu.name()

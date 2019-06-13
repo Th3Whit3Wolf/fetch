@@ -241,7 +241,7 @@ dependencies = [
  "shells 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "subprocess 0.1.18 (registry+https://github.com/rust-lang/crates.io-index)",
  "sys-info 0.5.6 (registry+https://github.com/rust-lang/crates.io-index)",
- "sysinfo 0.8.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sysinfo 0.8.5 (registry+https://github.com/rust-lang/crates.io-index)",
  "systemstat 0.1.3 (git+https://github.com/myfreeweb/systemstat)",
  "uptime_lib 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "vulkano 0.11.1 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -752,7 +752,7 @@ dependencies = [
 
 [[package]]
 name = "sysinfo"
-version = "0.8.0"
+version = "0.8.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "cfg-if 0.1.6 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -986,7 +986,7 @@ dependencies = [
 "checksum stable_deref_trait 1.1.1 (registry+https://github.com/rust-lang/crates.io-index)" = "dba1a27d3efae4351c8051072d619e3ade2820635c3958d826bfea39d59b54c8"
 "checksum subprocess 0.1.18 (registry+https://github.com/rust-lang/crates.io-index)" = "28fc0f40f0c0da73339d347aa7d6d2b90341a95683a47722bc4eebed71ff3c00"
 "checksum sys-info 0.5.6 (registry+https://github.com/rust-lang/crates.io-index)" = "617f594d3869801871433390254b4a79f2a18176d7f4ad5784fa990bc8c12986"
-"checksum sysinfo 0.8.0 (registry+https://github.com/rust-lang/crates.io-index)" = "a4da1ccc493b46042d6f5352910a7f18ed8fe81307dd7db3f2e2d8a7db6f6284"
+"checksum sysinfo 0.8.5 (registry+https://github.com/rust-lang/crates.io-index)" = "1cf62641ed7e88e20242b948d17b9fcc37e80b5599cf09cde190d6d4bb4bf289"
 "checksum systemstat 0.1.3 (git+https://github.com/myfreeweb/systemstat)" = "<none>"
 "checksum time 0.1.42 (registry+https://github.com/rust-lang/crates.io-index)" = "db8dcfca086c1143c9270ac42a2bbd8a7ee477b78ac8e45b19abfb0cbede4b6f"
 "checksum unicode-bidi 0.3.4 (registry+https://github.com/rust-lang/crates.io-index)" = "49f2bd0c6468a8230e1db229cff8029217cf623c767ea5d60bfbd42729ea54d5"
