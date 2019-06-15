@@ -5,12 +5,16 @@
 //! And now it can get information of kernel/cpu/memory/disk/load/hostname and so on.
 //!
 
+pub mod kernel;
+pub mod memory;
+pub mod title;
+
 extern crate libc;
 
 use std::ffi;
 use std::fmt;
-use std::io::{self, Read};
 use std::fs::File;
+use std::io::{self, Read};
 use std::os::raw::c_char;
 
 #[cfg(target_os = "macos")]
@@ -124,7 +128,6 @@ extern "C" {
     fn get_disk_info() -> DiskInfo;
 }
 
-
 /// Get operation system type.
 ///
 /// Such as "Linux", "Darwin", "Windows".
@@ -136,23 +139,6 @@ pub fn os_type() -> Result<String, Error> {
         Ok(s)
     } else if cfg!(target_os = "macos") || cfg!(target_os = "windows") {
         let typ = unsafe { ffi::CStr::from_ptr(get_os_type() as *const c_char).to_bytes() };
-        Ok(String::from_utf8_lossy(typ).into_owned())
-    } else {
-        Err(Error::UnsupportedSystem)
-    }
-}
-
-/// Get operation system release version.
-///
-/// Such as "3.19.0-gentoo"
-pub fn os_release() -> Result<String, Error> {
-    if cfg!(target_os = "linux") {
-        let mut s = String::new();
-        File::open("/proc/sys/kernel/osrelease")?.read_to_string(&mut s)?;
-        s.pop(); // pop '\n'
-        Ok(s)
-    } else if cfg!(target_os = "macos") || cfg!(target_os = "windows") {
-        let typ = unsafe { ffi::CStr::from_ptr(get_os_release() as *const c_char).to_bytes() };
         Ok(String::from_utf8_lossy(typ).into_owned())
     } else {
         Err(Error::UnsupportedSystem)
@@ -185,11 +171,11 @@ pub fn cpu_speed() -> Result<u64, Error> {
             _ => {}
         }
 
-        find_cpu_mhz.and_then(|line| line.split(':').last())
+        find_cpu_mhz
+            .and_then(|line| line.split(':').last())
             .and_then(|val| val.trim().parse::<f64>().ok())
             .map(|speed| speed as u64)
             .ok_or(Error::Unknown)
-
     } else if cfg!(target_os = "macos") || cfg!(target_os = "windows") {
         unsafe { Ok(get_cpu_speed()) }
     } else {
@@ -204,7 +190,9 @@ pub fn loadavg() -> Result<LoadAvg, Error> {
     if cfg!(target_os = "linux") {
         let mut s = String::new();
         File::open("/proc/loadavg")?.read_to_string(&mut s)?;
-        let loads = s.trim().split(' ')
+        let loads = s
+            .trim()
+            .split(' ')
             .take(3)
             .map(|val| val.parse::<f64>().unwrap())
             .collect::<Vec<f64>>();
@@ -239,52 +227,6 @@ pub fn proc_total() -> Result<u64, Error> {
     }
 }
 
-
-/// Get memory information.
-///
-/// On Mac OS X and Windows, the buffers and cached variables of the MemInfo returned are zero.
-pub fn mem_info() -> Result<MemInfo, Error> {
-    if cfg!(target_os = "linux") {
-        let mut s = String::new();
-        File::open("/proc/meminfo")?.read_to_string(&mut s)?;
-        let mut meminfo_hashmap = HashMap::new();
-        for line in s.lines() {
-            let mut split_line = line.split_whitespace();
-            let label = split_line.next();
-            let value = split_line.next();
-            if value.is_some() && label.is_some() {
-                let label = label.unwrap().split(':').nth(0).ok_or(Error::Unknown)?;
-                let value = value.unwrap().parse::<u64>().ok().ok_or(Error::Unknown)?;
-                meminfo_hashmap.insert(label, value);
-            }
-        }
-        let total = *meminfo_hashmap.get("MemTotal").ok_or(Error::Unknown)?;
-        let free = *meminfo_hashmap.get("MemFree").ok_or(Error::Unknown)?;
-        let buffers = *meminfo_hashmap.get("Buffers").ok_or(Error::Unknown)?;
-        let cached = *meminfo_hashmap.get("Cached").ok_or(Error::Unknown)?;
-        let avail = meminfo_hashmap.get("MemAvailable").map(|v| v.clone()).or_else(|| {
-            let sreclaimable = *meminfo_hashmap.get("SReclaimable")?;
-            let shmem = *meminfo_hashmap.get("Shmem")?;
-            Some(free + buffers + cached + sreclaimable - shmem)
-        }).ok_or(Error::Unknown)?;
-        let swap_total = *meminfo_hashmap.get("SwapTotal").ok_or(Error::Unknown)?;
-        let swap_free = *meminfo_hashmap.get("SwapFree").ok_or(Error::Unknown)?;
-        Ok(MemInfo {
-            total,
-            free,
-            avail,
-            buffers,
-            cached,
-            swap_total,
-            swap_free,
-        })
-    } else if cfg!(target_os = "macos") || cfg!(target_os = "windows") {
-        Ok(unsafe { get_mem_info() })
-    } else {
-        Err(Error::UnsupportedSystem)
-    }
-}
-
 /// Get disk information.
 ///
 /// Notice, it just calculate current disk on Windows.
@@ -296,37 +238,21 @@ pub fn disk_info() -> Result<DiskInfo, Error> {
     }
 }
 
-/// Get hostname.
-pub fn hostname() -> Result<String, Error> {
-    use std::process::Command;
-    if cfg!(unix) {
-        Command::new("hostname")
-            .output()
-            .map_err(Error::ExecFailed)
-            .map(|output| String::from_utf8(output.stdout).unwrap().trim().to_string())
-    } else if cfg!(windows) {
-        Command::new("hostname")
-            .output()
-            .map_err(Error::ExecFailed)
-            .map(|output| String::from_utf8(output.stdout).unwrap().trim().to_string())
-    } else {
-        Err(Error::UnsupportedSystem)
-    }
-}
-
 /// Get system boottime
 #[cfg(not(windows))]
 pub fn boottime() -> Result<timeval, Error> {
     let mut bt = timeval {
         tv_sec: 0,
-        tv_usec: 0
+        tv_usec: 0,
     };
 
     #[cfg(target_os = "linux")]
     {
         let mut s = String::new();
         File::open("/proc/uptime")?.read_to_string(&mut s)?;
-        let secs = s.trim().split(' ')
+        let secs = s
+            .trim()
+            .split(' ')
             .take(2)
             .map(|val| val.parse::<f64>().unwrap())
             .collect::<Vec<f64>>();
@@ -338,9 +264,14 @@ pub fn boottime() -> Result<timeval, Error> {
         let mut mib = [MAC_CTL_KERN, MAC_KERN_BOOTTIME];
         let mut size: libc::size_t = size_of_val(&bt) as libc::size_t;
         unsafe {
-            sysctl(&mut mib[0], 2,
-                   &mut bt as *mut timeval as *mut libc::c_void,
-                   &mut size, null_mut(), 0);
+            sysctl(
+                &mut mib[0],
+                2,
+                &mut bt as *mut timeval as *mut libc::c_void,
+                &mut size,
+                null_mut(),
+                0,
+            );
         }
     }
 
@@ -356,13 +287,6 @@ mod test {
         let typ = os_type().unwrap();
         assert!(typ.len() > 0);
         println!("os_type(): {}", typ);
-    }
-
-    #[test]
-    pub fn test_os_release() {
-        let release = os_release().unwrap();
-        assert!(release.len() > 0);
-        println!("os_release(): {}", release);
     }
 
     #[test]
@@ -393,23 +317,9 @@ mod test {
     }
 
     #[test]
-    pub fn test_mem_info() {
-        let mem = mem_info().unwrap();
-        assert!(mem.total > 0);
-        println!("mem_info(): {:?}", mem);
-    }
-
-    #[test]
     pub fn test_disk_info() {
         let info = disk_info().unwrap();
         println!("disk_info(): {:?}", info);
-    }
-
-    #[test]
-    pub fn test_hostname() {
-        let host = hostname().unwrap();
-        assert!(host.len() > 0);
-        println!("hostname(): {}", host);
     }
 
     #[test]

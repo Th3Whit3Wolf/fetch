@@ -33,4 +33,4 @@ edition = "2018"
 cc = "1"
 
 [dependencies]
-libc = "0.2.29"
+libc = "0.2.58"
