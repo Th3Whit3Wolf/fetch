@@ -1,0 +1,36 @@
+[package]
+name = "lib_fetch"
+version = "0.1.0"
+authors = ["Whi73_W0lf <Wh173_W0lf@protonmail.com>",
+			# Whom I forked sys-info-rs
+			"Siyu Wang <FillZpp.pub@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+keywords = ["system", "cpu", "disk", "memory", "information"]
+repository = "https://github.com/FillZpp/sys-info-rs"
+documentation = "https://docs.rs/sys-info/0.5.7/sys_info/"
+description = """
+Get system information in Rust for Fetch.
+Hopes to supports Unix and Windows.
+Gaurantees support for Linux.
+"""
+
+links = "info"
+build = "build.rs"
+
+[lib]
+name = "lib_fetch"
+path = "lib/lib.rs"
+test = true
+doctest = true
+bench = false
+doc = true
+proc-macro = false
+harness = true
+edition = "2018"
+
+[build-dependencies]
+cc = "1"
+
+[dependencies]
+libc = "0.2.29"

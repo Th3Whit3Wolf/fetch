@@ -1,55 +1,9 @@
-[package]
-name = "fetch"
-version = "0.1.0"
-authors = ["Whi73_W0lf <Wh173_W0lf@protonmail.com>"]
-edition = "2018"
+[workspace]
+members = [
+    "fetch",
+    "lib_fetch"
+]
 
-[build]
-rustflags = ["-C", "target-cpu=native"]
-
-
-[dependencies]
-libc = "0.2"
-bytesize = "1.0.0"
-chrono = "0.4.6"
-lazy_static = "1.0"
-
-[target.'cfg(any(target_os = "linux", target_os = "android"))'.dependencies]
-nom = "3.2"
-# librpm might work
-# easier to pass shell commands
-
-[features]
-default = []
-libx11 = ["x11"]
-vulkan = ["vulkano"]
-arch = ["libalpm-fork"]
-#deb = ["apt-pkg-native"]
-#rpm = ["librpm"]
-
-[dependencies.x11]
-version = "2.18.1"
-features = ["xlib"] 
-optional = true
-
-[dependencies.vulkano]
-version = "0.11.1"
-optional = true
-
-[dependencies.libalpm-fork]
-version = "0.1.4"
-optional = true
-
-#[dependencies.librpm]
-#version = "0.1.1"
-#optional = true
-
-#[dependencies.apt-pkg-native]
-#version = "0.3.0"
-#optional = true
-
-
-# The release profile, used for `cargo build --release`.
 [profile.release]
 opt-level = 3
 debug = false
@@ -58,11 +12,4 @@ lto = true
 debug-assertions = false
 codegen-units = 1
 panic = 'unwind'
-
-[lib]
-name = "fetch_rs"
-path = "src/lib.rs"
-
-[[bin]]
-name = "mybin"
-path = "src/bin.rs"
+rustflags = ["-C", "target-cpu=native"]

@@ -1,0 +1,30 @@
+[package]
+name = "fetch"
+version = "0.1.0"
+authors = ["Whi73_W0lf <Wh173_W0lf@protonmail.com>",
+			# Whom I forked sys-info-rs
+			"Siyu Wang <FillZpp.pub@gmail.com>"]
+
+[dependencies]
+lib_fetch = { path = "../lib_fetch" }
+
+# librpm might work
+# easier to pass shell commands
+
+[features]
+default = []
+arch = ["libalpm-fork"]
+#deb = ["apt-pkg-native"]
+#rpm = ["librpm"]
+
+[dependencies.libalpm-fork]
+version = "0.1.4"
+optional = true
+
+#[dependencies.librpm]
+#version = "0.1.1"
+#optional = true
+
+#[dependencies.apt-pkg-native]
+#version = "0.3.0"
+#optional = true
