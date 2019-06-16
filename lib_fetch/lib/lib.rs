@@ -6,10 +6,12 @@
 //! And now it can get information of kernel/cpu/memory/disk/load/hostname and so on.
 //!
 
+pub mod de_wm;
 pub mod host;
 pub mod kernel;
 pub mod memory;
 pub mod os;
+pub mod package;
 pub mod shell;
 pub mod title;
 pub mod uptime;
@@ -17,6 +19,9 @@ pub mod uptime;
 #[macro_use]
 extern crate lazy_static;
 extern crate libc;
+//extern crate test as other_test;
+
+use std::cmp;
 
 use std::{
     ffi, fmt,
@@ -27,6 +32,16 @@ use std::{
 
 #[cfg(target_os = "macos")]
 use libc::sysctl;
+
+#[cfg(target_pointer_width = "16")]
+const USIZE_BYTES: usize = 2;
+#[cfg(target_pointer_width = "32")]
+const USIZE_BYTES: usize = 4;
+#[cfg(target_pointer_width = "64")]
+const USIZE_BYTES: usize = 8;
+const LO: usize = ::std::usize::MAX / 255;
+const HI: usize = LO * 128;
+const REP_NEWLINE: usize = b'\n' as usize * LO;
 
 /// System load average value.
 #[repr(C)]
@@ -236,6 +251,81 @@ pub fn disk_info() -> Result<DiskInfo, Error> {
     } else {
         Err(Error::UnsupportedSystem)
     }
+}
+
+fn count_lines(s: &str) -> usize {
+    fn mask_zero(x: usize) -> usize {
+        ((x.wrapping_sub(LO)) & !x & HI) >> 7
+    }
+    let text = s.as_bytes();
+    let (ptr, len) = (text.as_ptr(), text.len());
+
+    let align = (ptr as usize) & (USIZE_BYTES - 1);
+    let mut offset;
+    let mut count;
+    if align > 0 {
+        offset = cmp::min(USIZE_BYTES - align, len);
+        count = text[..offset].iter().filter(|b| **b == b'\n').count();
+    } else {
+        offset = 0;
+        count = 0;
+    }
+    while offset + 8 * USIZE_BYTES <= len {
+        unsafe {
+            let x0 = *(ptr.offset(offset as isize) as *const usize);
+            let x1 = *(ptr.offset((offset + USIZE_BYTES) as isize) as *const usize);
+            let x2 = *(ptr.offset((offset + USIZE_BYTES * 2) as isize) as *const usize);
+            let x3 = *(ptr.offset((offset + USIZE_BYTES * 3) as isize) as *const usize);
+            let x4 = *(ptr.offset((offset + USIZE_BYTES * 4) as isize) as *const usize);
+            let x5 = *(ptr.offset((offset + USIZE_BYTES * 5) as isize) as *const usize);
+            let x6 = *(ptr.offset((offset + USIZE_BYTES * 6) as isize) as *const usize);
+            let x7 = *(ptr.offset((offset + USIZE_BYTES * 7) as isize) as *const usize);
+
+            count += ((mask_zero(x0 ^ REP_NEWLINE)
+                + mask_zero(x1 ^ REP_NEWLINE)
+                + mask_zero(x2 ^ REP_NEWLINE)
+                + mask_zero(x3 ^ REP_NEWLINE))
+                + (mask_zero(x4 ^ REP_NEWLINE)
+                    + mask_zero(x5 ^ REP_NEWLINE)
+                    + mask_zero(x6 ^ REP_NEWLINE)
+                    + mask_zero(x7 ^ REP_NEWLINE)))
+            .wrapping_mul(LO)
+                >> ((USIZE_BYTES - 1) * 8);
+        }
+        offset += USIZE_BYTES * 8;
+    }
+    while offset + 4 * USIZE_BYTES <= len {
+        unsafe {
+            let x0 = *(ptr.offset(offset as isize) as *const usize);
+            let x1 = *(ptr.offset((offset + USIZE_BYTES) as isize) as *const usize);
+            let x2 = *(ptr.offset((offset + USIZE_BYTES * 2) as isize) as *const usize);
+            let x3 = *(ptr.offset((offset + USIZE_BYTES * 3) as isize) as *const usize);
+
+            count += (mask_zero(x0 ^ REP_NEWLINE)
+                + mask_zero(x1 ^ REP_NEWLINE)
+                + mask_zero(x2 ^ REP_NEWLINE)
+                + mask_zero(x3 ^ REP_NEWLINE))
+            .wrapping_mul(LO)
+                >> ((USIZE_BYTES - 1) * 8)
+        }
+        offset += USIZE_BYTES * 4;
+    }
+    while offset + 2 * USIZE_BYTES <= len {
+        unsafe {
+            let x0 = *(ptr.offset(offset as isize) as *const usize);
+            let x1 = *(ptr.offset((offset + USIZE_BYTES) as isize) as *const usize);
+
+            count += (mask_zero(x0 ^ REP_NEWLINE) + mask_zero(x1 ^ REP_NEWLINE)).wrapping_mul(LO)
+                >> ((USIZE_BYTES - 1) * 8)
+        }
+        offset += USIZE_BYTES * 2;
+    }
+    while offset + USIZE_BYTES <= len {
+        let x0 = unsafe { *(ptr.offset(offset as isize) as *const usize) };
+        count += mask_zero(x0 ^ REP_NEWLINE).wrapping_mul(LO) >> ((USIZE_BYTES - 1) * 8);
+        offset += USIZE_BYTES;
+    }
+    count + text[offset..].iter().filter(|b| **b == b'\n').count()
 }
 
 #[cfg(test)]

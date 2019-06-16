@@ -2,7 +2,6 @@
 extern crate kernel32;
 #[cfg(not(windows))]
 extern crate libc;
-//extern crate time;
 
 use std::fmt::Write;
 #[cfg(not(windows))]
@@ -57,9 +56,9 @@ fn get() -> Result<Duration, String> {
 pub fn uptime(short: bool) -> String {
     match get() {
         Ok(uptime) => {
-            let uptime = format_duration(uptime).to_string();
+            let uptime = format_duration(uptime);
             if short {
-                parse_for_shorthand_time(uptime).to_string()
+                parse_for_shorthand_time(uptime)
             } else {
                 uptime
             }
@@ -71,22 +70,48 @@ pub fn uptime(short: bool) -> String {
     }
 }
 
+/// Takes Time in milliseconds
+/// Returns time formated (e.g. 3 days, 4 hours, 16 mins, 17 seconds)
+/// Or (e.g. 1 day, 1 hour, 1 min, 1 second)
 fn format_duration(duration: Duration) -> String {
     let sec = duration.as_secs();
 
-    let days = sec / 86400;
+    let years = sec / 31557600; // 365.25d
+    let sec = sec % 31557600;
 
+    let months = sec / 2630016;
+    let sec = sec % 2630016;
+
+    let days = sec / 86400;
     let sec = sec % 86400;
 
     let hours = sec / 3600;
-
     let sec = sec % 3600;
 
     let minutes = sec / 60;
-
     let seconds = sec % 60;
 
     let mut s = String::new();
+
+    if years > 0 {
+        s.write_fmt(format_args!("{} year", years)).unwrap();
+
+        if years > 1 {
+            s.push('s');
+        }
+
+        s.push_str(", ");
+    }
+
+    if months > 0 {
+        s.write_fmt(format_args!("{} month", months)).unwrap();
+
+        if months > 1 {
+            s.push('s');
+        }
+
+        s.push_str(", ");
+    }
 
     if days > 0 {
         s.write_fmt(format_args!("{} day", days)).unwrap();
@@ -156,4 +181,27 @@ fn parse_for_shorthand_time(uptime: String) -> String {
     let newtime = str::replace(&newtime, "minute", "m");
     let newtime = str::replace(&newtime, "seconds", "s");
     str::replace(&newtime, "second", "s")
+}
+
+#[test]
+fn test_uptime_get() {
+    assert_eq!(get().is_ok(), true);
+}
+
+#[test]
+fn test_format_duration() {
+    assert_eq!(
+        format_duration(Duration::new(864000000, 0)).len() == 65,
+        true
+    );
+    assert_eq!(
+        format_duration(Duration::new(864000000, 0))
+            == String::from("27 years, 4 months, 16 days, 11 hours, 45 minutes, and 36 seconds"),
+        true
+    );
+    println!("{}", format_duration(Duration::new(864000000, 0)));
+    println!(
+        "len = {}",
+        format_duration(Duration::new(864000000, 0)).len()
+    );
 }

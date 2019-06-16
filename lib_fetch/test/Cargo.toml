@@ -1,11 +1,15 @@
 [package]
-
 name = "test"
 version = "0.0.1"
-authors = ["FillZpp <FillZpp.pub@gmail.com>"]
+authors = ["Whi73_W0lf <Wh173_W0lf@protonmail.com>",
+			# Whom I forked sys-info-rs
+			"Siyu Wang <FillZpp.pub@gmail.com>"]
 
-[dependencies.sys-info]
+[dependencies.lib_fetch]
 path = ".."
 version = "*"
 
 
+[features]
+default = []
+arch = ["libalpm-fork"]
