@@ -1,32 +1,32 @@
 //! #Introduction
 //! This crate focuses on geting system information.
 //!
-//! For now it supports Linux, Mac OS X and Windows.
+//! For now it mostly supports Mac OS X and Windows.
+//! It will always support Linux
 //! And now it can get information of kernel/cpu/memory/disk/load/hostname and so on.
 //!
 
+pub mod host;
 pub mod kernel;
 pub mod memory;
+pub mod os;
+pub mod shell;
 pub mod title;
+pub mod uptime;
 
+#[macro_use]
+extern crate lazy_static;
 extern crate libc;
 
-use std::ffi;
-use std::fmt;
-use std::fs::File;
-use std::io::{self, Read};
-use std::os::raw::c_char;
+use std::{
+    ffi, fmt,
+    fs::File,
+    io::{self, Read},
+    os::raw::c_char,
+};
 
 #[cfg(target_os = "macos")]
 use libc::sysctl;
-use libc::timeval;
-use std::mem::size_of_val;
-use std::ptr::null_mut;
-
-use std::collections::HashMap;
-
-static MAC_CTL_KERN: libc::c_int = 1;
-static MAC_KERN_BOOTTIME: libc::c_int = 21;
 
 /// System load average value.
 #[repr(C)]
@@ -238,46 +238,6 @@ pub fn disk_info() -> Result<DiskInfo, Error> {
     }
 }
 
-/// Get system boottime
-#[cfg(not(windows))]
-pub fn boottime() -> Result<timeval, Error> {
-    let mut bt = timeval {
-        tv_sec: 0,
-        tv_usec: 0,
-    };
-
-    #[cfg(target_os = "linux")]
-    {
-        let mut s = String::new();
-        File::open("/proc/uptime")?.read_to_string(&mut s)?;
-        let secs = s
-            .trim()
-            .split(' ')
-            .take(2)
-            .map(|val| val.parse::<f64>().unwrap())
-            .collect::<Vec<f64>>();
-        bt.tv_sec = secs[0] as libc::time_t;
-        bt.tv_usec = secs[1] as libc::suseconds_t;
-    }
-    #[cfg(target_os = "macos")]
-    {
-        let mut mib = [MAC_CTL_KERN, MAC_KERN_BOOTTIME];
-        let mut size: libc::size_t = size_of_val(&bt) as libc::size_t;
-        unsafe {
-            sysctl(
-                &mut mib[0],
-                2,
-                &mut bt as *mut timeval as *mut libc::c_void,
-                &mut size,
-                null_mut(),
-                0,
-            );
-        }
-    }
-
-    Ok(bt)
-}
-
 #[cfg(test)]
 mod test {
     use super::*;
@@ -320,13 +280,5 @@ mod test {
     pub fn test_disk_info() {
         let info = disk_info().unwrap();
         println!("disk_info(): {:?}", info);
-    }
-
-    #[test]
-    #[cfg(not(windows))]
-    pub fn test_boottime() {
-        let bt = boottime().unwrap();
-        println!("boottime(): {} {}", bt.tv_sec, bt.tv_usec);
-        assert!(bt.tv_sec > 0 || bt.tv_usec > 0);
     }
 }

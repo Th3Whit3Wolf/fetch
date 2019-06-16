@@ -1,16 +1,11 @@
 extern crate libc;
 
-use crate::get_mem_info;
-use crate::Error;
-use crate::MemInfo;
+use crate::{get_mem_info, Error, MemInfo};
 
-use std::fs::File;
-use std::io::Read;
+use std::{collections::HashMap, fs::File, io::Read};
 
 #[cfg(target_os = "macos")]
 use libc::sysctl;
-
-use std::collections::HashMap;
 
 /// Get memory information.
 ///

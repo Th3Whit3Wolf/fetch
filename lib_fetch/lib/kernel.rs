@@ -1,12 +1,8 @@
 extern crate libc;
 
-use crate::get_os_release;
-use crate::Error;
-use std::ffi;
+use crate::{get_os_release, Error};
 
-use std::fs::File;
-use std::io::Read;
-use std::os::raw::c_char;
+use std::{ffi, fs::File, io::Read, os::raw::c_char};
 
 #[cfg(target_os = "macos")]
 use libc::sysctl;
