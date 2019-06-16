@@ -1,33 +1,44 @@
 <h1 align=center>fetch</h1>
-        <h3 align=center>A command-line system information tool written in Rust</h3>
-                <h3 align=center>WIP</h3>
+        <h3 align=center>A command-line system information tool written in Rust[WIP]</h3>
 
-## Features
-- Fast
+## Detection
+- Username
+- Hostname
+- OS
+- Host
+- Uptime
+- Destop Environment
+- Shell
+- Memory
+- Packages
+
+#### In Progress
+- GPU(s)
+- CPU (Frequency, Logical Cores, Physical Cores, Temperature)
+
+## TODO
+- [ ] Better Shell Support
+- [ ] More package detection (limited to pacman at the moment)
+- [ ] Window Manager Detection
+- [ ] IP Address
+- [ ] OS Installation Date
+- [ ] Themes
+- [ ] Icons
+- [ ] Ascii Art
+- [ ] Better Cross Platform Support
+
+## Goals
+- Multithreaded
+- Async
+- Hook into system libraries
 
 ### Installation
 #### Arch Linux
 ```bash
-cargo install --git https://github.com/FriedPandaFries/fetch.com --features arch
+cargo install --git https://github.com/Th3Whit3Wolf/fetch.git--features arch
 ```
-#### Debian, Linux Mint, Ubuntu
-```bash
-sudo apt install libarchive-dev pkg-config
-cargo install --git https://github.com/FriedPandaFries/fetch.com --features deb
-```
-#### Everyone else
-``` bash
-cargo install --git https://github.com/FriedPandaFries/fetch.com
-```
-## Goals
+
+## Philosophy
 - Be unnecessarily fast
 - Use the fewest(ideally none) externall processes
-- Run on all Linux Distros and eventually BSD, Mac, and Windows
-
-## ToDos
-- [ ] Display WM, WM Theme, Theme, Terminal fonts
-- [ ] Support More shells
-- [ ] Finish Package Manager Finder function
-- [ ] Implement a new way to parser Ascii Art
-- [ ] Achieve Feature parity with Neofetch
-- [ ] Rework uptime implementation to something more easily read
+- Run[eventually] on all Linux Distros, BSD, Mac, Windows, and Haiku

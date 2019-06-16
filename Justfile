@@ -11,7 +11,11 @@ Measure:
 
 # Run test (add parameter to run specific test)
 Test test=all:
-    @cargo test
+    @cargo test tests
+
+# Test and capture output
+cap test:
+    @cargo test tests -- --nocapture
 
 # Compare Output with neofetch
 Compare:

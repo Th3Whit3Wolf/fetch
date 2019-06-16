@@ -13,7 +13,7 @@ fn get() -> Result<Duration, String> {
     let mut info: libc::sysinfo = unsafe { mem::zeroed() };
     let ret = unsafe { libc::sysinfo(&mut info) };
     if ret == 0 {
-        Ok(Duration::from_millis(info.uptime as u64))
+        Ok(Duration::from_secs(info.uptime as u64))
     } else {
         Err("sysinfo failed".to_string())
     }
@@ -204,4 +204,11 @@ fn test_format_duration() {
         "len = {}",
         format_duration(Duration::new(864000000, 0)).len()
     );
+}
+
+#[test]
+fn test_uptime() {
+    let d = get();
+    println!("{:#?}", d);
+    println!("len = {}", format_duration(d.unwrap()));
 }
