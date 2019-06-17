@@ -2,10 +2,8 @@
 <h3 align=center>A command-line system information tool written in Rust[WIP]</h3>
 
 [![Build Status](https://travis-ci.org/Th3Whit3Wolf/fetch.svg?branch=master)](https://travis-ci.org/Th3Whit3Wolf/fetch)
-
-
 [![codecov](https://codecov.io/gh/Th3Whit3Wolf/fetch/branch/master/graph/badge.svg)](https://codecov.io/gh/Th3Whit3Wolf/fetch)
-
+ [![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](http://unlicense.org/)
 
 ## Detection
 - Username
