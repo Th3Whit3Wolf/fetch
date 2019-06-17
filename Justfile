@@ -6,6 +6,7 @@ alias r := Run
 
 all := ' '
 
+
 # Measure performace with hyperfine
 Measure: Build
     @hyperfine target/release/fetch
@@ -23,11 +24,21 @@ Compare:
     @neofetch --off --color_blocks off
     @target/release/fetch
 
+# Cleans Cargo Cache
 Clean:
 	@cargo clean
 
+# Builds Fetch
 Build:
 	@cargo build --release
 
+# Builds & Runs Fetch
 Run: Build
 	@cargo run --release
+
+# Checks Code Quality Before Pushing to GH
+Push: 
+	@cargo fmt --all
+	@cargo build --verbose --all
+	@cargo test --verbose --all
+	
