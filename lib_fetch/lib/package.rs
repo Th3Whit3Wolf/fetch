@@ -57,6 +57,7 @@ pub fn packages() -> std::string::String {
 
 use std::time::Instant;
 
+#[ignore]
 #[test]
 pub fn pkg() {
     let baseline = Instant::now();
