@@ -21,6 +21,5 @@ fn main() {
         .flag("-mtune=native")
         .flag("-O2")
         .flag("-pipe")
-        .flag("-fno-plt")
         .compile("info");
 }
