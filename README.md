@@ -1,6 +1,7 @@
 <h1 align=center>fetch</h1>
-[![Build Status](https://travis-ci.org/Th3Whit3Wolf/fetch.svg?branch=master)](https://travis-ci.org/Th3Whit3Wolf/fetch)
 <h3 align=center>A command-line system information tool written in Rust[WIP]</h3>
+
+[![Build Status](https://travis-ci.org/Th3Whit3Wolf/fetch.svg?branch=master)](https://travis-ci.org/Th3Whit3Wolf/fetch)
 
 ## Detection
 - Username
