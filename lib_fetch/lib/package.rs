@@ -74,13 +74,12 @@ pub fn pkg() {
     );
 }
 
+#[cfg(feature = "arch")]
 #[test]
 pub fn test_pac() {
     let pac = Instant::now();
-    #[cfg(feature = "arch")]
     let num = pacman();
     let t1 = pac.elapsed();
     println!("lib Alpm Time: {:?}", t1);
-    #[cfg(feature = "arch")]
     println!("found {} packages", num);
 }
