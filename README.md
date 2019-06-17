@@ -3,6 +3,10 @@
 
 [![Build Status](https://travis-ci.org/Th3Whit3Wolf/fetch.svg?branch=master)](https://travis-ci.org/Th3Whit3Wolf/fetch)
 
+
+[![codecov](https://codecov.io/gh/Th3Whit3Wolf/fetch/branch/master/graph/badge.svg)](https://codecov.io/gh/Th3Whit3Wolf/fetch)
+
+
 ## Detection
 - Username
 - Hostname
