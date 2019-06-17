@@ -4,7 +4,8 @@ version = "0.1.0"
 authors = ["Whi73_W0lf <Wh173_W0lf@protonmail.com>"]
 
 [dependencies]
-lib_fetch = { path = "../lib_fetch"}
+lib_fetch = { path = "../lib_fetch" }
+
 
 #[features]
 #default = []
@@ -14,7 +15,6 @@ lib_fetch = { path = "../lib_fetch"}
 #[dependencies.lib_fetch]
 #default-features = false
 #lib_fetch = { path = "../lib_fetch" }
-#version = "*"
 #path = "../lib_fetch"
 #features = ["arch"]
 #optional = true

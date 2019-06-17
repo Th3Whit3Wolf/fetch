@@ -13,7 +13,7 @@ fn get_package_count_arch_based() -> String {
     let pkgs = count_lines(&String::from_utf8(pacman.stdout).unwrap());
     format!("{} (pacman)", pkgs)
 }
-/*
+
 #[cfg(feature = "arch")]
 fn pacman() -> usize {
     use libalpm_fork::*;
@@ -22,7 +22,6 @@ fn pacman() -> usize {
     let paccache = db.pkg_cache();
     paccache.len()
 }
-*/
 
 fn other_arch_based() -> String {
     let pacman = Command::new("pacman")
@@ -74,7 +73,7 @@ pub fn pkg() {
         t0, t1, t2
     );
 }
-/*
+
 #[test]
 pub fn test_pac() {
     let pac = Instant::now();
@@ -85,4 +84,3 @@ pub fn test_pac() {
     #[cfg(feature = "arch")]
     println!("found {} packages", num);
 }
-*/

@@ -42,3 +42,10 @@ num_cpus = "1.10.1"
 [target.'cfg(windows)'.dependencies]
 kernel32-sys = "0.2"
 
+[features]
+default = []
+arch = ["libalpm-fork"]
+
+[dependencies.libalpm-fork]
+version = "0.1.4"
+optional = true
