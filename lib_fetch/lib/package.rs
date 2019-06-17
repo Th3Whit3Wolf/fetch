@@ -55,11 +55,12 @@ pub fn packages() -> std::string::String {
     get_package_count_arch_based()
 }
 
-use std::time::Instant;
-
+// These test will be ignored by Travis CI
 #[ignore]
 #[test]
 pub fn pkg() {
+    use std::time::Instant;
+
     let baseline = Instant::now();
     arch_pkg();
     let t0 = baseline.elapsed();
@@ -78,6 +79,8 @@ pub fn pkg() {
 #[cfg(feature = "arch")]
 #[test]
 pub fn test_pac() {
+    use std::time::Instant;
+
     let pac = Instant::now();
     let num = pacman();
     let t1 = pac.elapsed();
